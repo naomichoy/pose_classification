@@ -3,7 +3,7 @@ cap = cv2.VideoCapture(0,cv2.CAP_V4L2)
 
 while (True):
   ret, frame = cap.read()
-  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 #   output = poseDetector(frame)
   # Display the resulting frame
