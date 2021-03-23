@@ -151,7 +151,7 @@ while (True):  #cap.isOpened() and count < 500:
         break
 
     imgg = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-    output = execute(imgg t)
+    output = execute(imgg, t)
     count += 1
     cv2.imshow('frame',output)
 
