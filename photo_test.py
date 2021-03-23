@@ -151,7 +151,7 @@ def execute_2(img, org):
 
 
 parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
-parser.add_argument('--image', type=str, default='/test.jpg')
+parser.add_argument('--image', type=str, default='/test.JPG')
 parser.add_argument('--model', type=str, default='resnet', help = 'resnet or densenet' )
 args = parser.parse_args()
 
