@@ -132,17 +132,17 @@ def execute(img, t):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     fps = 1.0 / (time.time() - t)
-    # for i in range(counts[0]):
-    #     keypoints = get_keypoint(objects, i, peaks)
-    #     for j in range(len(keypoints)):
-    #         if keypoints[j][1]:
-    #             x = round(keypoints[j][2] * WIDTH * X_compress)
-    #             y = round(keypoints[j][1] * HEIGHT * Y_compress)
-    #             cv2.circle(img, (x, y), 3, color, 2)
-    #             cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
-    #             cv2.circle(img, (x, y), 3, color, 2)
+    for i in range(counts[0]):
+        keypoints = get_keypoint(objects, i, peaks)
+        for j in range(len(keypoints)):
+            if keypoints[j][1]:
+                x = round(keypoints[j][2] * WIDTH * X_compress)
+                y = round(keypoints[j][1] * HEIGHT * Y_compress)
+                cv2.circle(img, (x, y), 3, color, 2)
+                cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
+                cv2.circle(img, (x, y), 3, color, 2)
     print("FPS:%f "%(fps))
-    draw_objects(img, counts, objects, peaks)
+    # draw_objects(img, counts, objects, peaks)
 
     cv2.putText(img , "FPS: %f" % (fps), (20, 20),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     # cv2.imshow('frame', src)
@@ -151,8 +151,8 @@ def execute(img, t):
 
 
 
-# cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) 
+cap = cv2.VideoCapture(1)
+# cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
