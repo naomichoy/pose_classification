@@ -150,8 +150,8 @@ while (True):  #cap.isOpened() and count < 500:
         print("Camera read Error")
         break
 
-    img = cv2.resize(dst, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-    output = execute(frame, dst, t)
+    imgg = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+    output = execute(imgg t)
     count += 1
     cv2.imshow('frame',output)
 
