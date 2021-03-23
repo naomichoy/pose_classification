@@ -216,4 +216,4 @@ for x in range(1):
     cv2.imshow('key',img)
 dir, filename = os.path.split(args.image)
 name, ext = os.path.splitext(filename)
-pilimg.save('./%s_%s.jpg'%(args.model, name))
+pilimg.save('./%s_%s.png'%(args.model, name))
