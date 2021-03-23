@@ -15,10 +15,10 @@ import os.path
 
 
 def gstreamer_pipeline(
-    capture_width=1280,
-    capture_height=720,
-    display_width=1280,
-    display_height=720,
+    capture_width=224,
+    capture_height=224,
+    display_width=224,
+    display_height=224,
     framerate=60,
     flip_method=0,
 ):
@@ -157,8 +157,8 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 ret_val, img = cap.read()
-fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-out_video = cv2.VideoWriter('/tmp/output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (640, 480))
+# fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+# out_video = cv2.VideoWriter('/tmp/output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (640, 480))
 count = 0
 
 X_compress = 640.0 / WIDTH * 1.0
@@ -183,6 +183,8 @@ while (True):  #cap.isOpened() and count < 500:
     output = execute(imgg, t)
     count += 1
     cv2.imshow('frame',output)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+      break
 
 
 cv2.destroyAllWindows()
