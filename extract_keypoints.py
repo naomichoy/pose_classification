@@ -117,7 +117,7 @@ def execute(img, src, t):
     #draw_objects(img, counts, objects, peaks)
 
     cv2.putText(src , "FPS: %f" % (fps), (20, 20),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
-    cv2.imshow(src)
+    cv2.imshow('frame', src)
     # out_video.write(src)
 
 
