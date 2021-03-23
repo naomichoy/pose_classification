@@ -97,7 +97,7 @@ def preprocess(image):
     image.sub_(mean[:, None, None]).div_(std[:, None, None])
     return image[None, ...]
 
-def execute(img, src, t):
+def execute(img, t):
     color = (0, 255, 0)
     data = preprocess(img)
     cmap, paf = model_trt(data)
@@ -110,14 +110,15 @@ def execute(img, src, t):
             if keypoints[j][1]:
                 x = round(keypoints[j][2] * WIDTH * X_compress)
                 y = round(keypoints[j][1] * HEIGHT * Y_compress)
-                cv2.circle(src, (x, y), 3, color, 2)
-                cv2.putText(src , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
-                cv2.circle(src, (x, y), 3, color, 2)
+                cv2.circle(img, (x, y), 3, color, 2)
+                cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
+                cv2.circle(img, (x, y), 3, color, 2)
     print("FPS:%f "%(fps))
     #draw_objects(img, counts, objects, peaks)
 
     cv2.putText(src , "FPS: %f" % (fps), (20, 20),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
-    cv2.imshow('frame', src)
+    # cv2.imshow('frame', src)
+    return img
     # out_video.write(src)
 
 
@@ -141,16 +142,18 @@ if cap is None:
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
-while cap.isOpened() and count < 500:
+while (True):  #cap.isOpened() and count < 500:
     t = time.time()
-    ret_val, dst = cap.read()
-    if ret_val == False:
+    # ret_val, dst = cap.read()
+    ret, frame = cap.read()
+    if ret == False:
         print("Camera read Error")
         break
 
     img = cv2.resize(dst, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-    execute(img, dst, t)
+    output = execute(frame, dst, t)
     count += 1
+    cv2.imshow('frame',output)
 
 
 cv2.destroyAllWindows()
