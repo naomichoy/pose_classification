@@ -15,10 +15,10 @@ import os.path
 
 
 def gstreamer_pipeline(
-    capture_width=224,
-    capture_height=224,
-    display_width=224,
-    display_height=224,
+    capture_width=1280,
+    capture_height=720,
+    display_width=1280,
+    display_height=720,
     framerate=60,
     flip_method=0,
 ):
@@ -69,6 +69,7 @@ parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
 parser.add_argument('--model', type=str, default='resnet', help = 'resnet or densenet' )
 args = parser.parse_args()
 
+# load body part specification
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
 
@@ -78,6 +79,7 @@ num_parts = len(human_pose['keypoints'])
 num_links = len(human_pose['skeleton'])
 
 
+# choose model
 if 'resnet' in args.model:
     print('------ model = resnet--------')
     MODEL_WEIGHTS = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
@@ -94,6 +96,7 @@ else:
     WIDTH = 256
     HEIGHT = 256
 
+# load trt optimised model, if exist not create one
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 if os.path.exists(OPTIMIZED_MODEL) == False:
     model.load_state_dict(torch.load(MODEL_WEIGHTS))
@@ -132,9 +135,21 @@ def execute(img, t):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     fps = 1.0 / (time.time() - t)
-    for i in range(counts[0]):
+    if counts[0] == 1: # only extract the key points if exactly one person is detected
         keypoints = get_keypoint(objects, i, peaks)
-        print(keypoints[0])
+        head = keypoints[0]
+        neck = keypoints[17]
+        right_hip = keypoints[11]
+        left_hip = keypoints[12]
+    
+    head_y = head[1] * HEIGHT * Y_compress
+    print(head_y)
+
+
+    # reference code
+    # for i in range(counts[0]):
+    #     keypoints = get_keypoint(objects, i, peaks)
+    #     print(keypoints[0])
         # for j in range(len(keypoints)):
         #     print(keypoints[j])
         #     if keypoints[j][1]:
@@ -143,18 +158,20 @@ def execute(img, t):
         #         cv2.circle(img, (x, y), 3, color, 2)
         #         cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
         #         cv2.circle(img, (x, y), 3, color, 2)
-    print("FPS:%f "%(fps))
+
+    
     # draw_objects(img, counts, objects, peaks)
 
     # cv2.putText(img , "FPS: %f" % (fps), (20, 20),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     # cv2.imshow('frame', src)
+    print("FPS:%f "%(fps))
     return img
     # out_video.write(src)
 
 
 
-cap = cv2.VideoCapture(1)
-# cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) 
+cap = cv2.VideoCapture(1) # usb camera
+# cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) # CSI camera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
