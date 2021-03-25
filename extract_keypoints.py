@@ -129,7 +129,7 @@ def preprocess(image):
     return image[None, ...]
 
 def execute(img, t):
-    color = (0, 255, 0) # <--
+    color = (0, 255, 0) # <-- for drawing circle points
     data = preprocess(img)
     cmap, paf = model_trt(data)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
@@ -139,11 +139,13 @@ def execute(img, t):
     # print(counts[0])
     if counts[0] == 1: # only extract the key points if exactly one person is detected
         keypoints = get_keypoint(objects, 0, peaks)
-        if keypoints[0][1]:
+        if keypoints[0][1] or keypoints[17][1]:
             head = keypoints[0]
             neck = keypoints[17]
-            right_hip = keypoints[11]
-            left_hip = keypoints[12]
+            Lhip = keypoints[11]
+            Rhip = keypoints[12]
+            Lshoulder = keypoints[5]
+            Rshoulder = keypoints[6]
         
             print(head)
             head_y = head[1] * HEIGHT # index 1 = height
@@ -196,6 +198,10 @@ if cap is None:
 
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
+
+min_head_y = 0
+max_head_y = 0
+FALL_THRESHOLD = 60
 
 while (True):  #cap.isOpened() and count < 500:
     t = time.time()
