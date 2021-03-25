@@ -151,6 +151,7 @@ def execute(img, t):
 
     # reference code
     for i in range(counts[0]):
+        print("Human index:%d "%( i ))
         keypoints = get_keypoint(objects, i, peaks)
         print(keypoints[0])
         for j in range(len(keypoints)):
