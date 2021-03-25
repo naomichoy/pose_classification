@@ -141,9 +141,9 @@ def execute(img, t):
         neck = keypoints[17]
         right_hip = keypoints[11]
         left_hip = keypoints[12]
-    
-    head_y = head[1] * HEIGHT * Y_compress
-    print(head_y)
+    print(head)
+    # head_y = head[1] * HEIGHT * Y_compress
+    # print(head_y)
 
 
     # reference code
