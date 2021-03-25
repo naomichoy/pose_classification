@@ -137,33 +137,34 @@ def execute(img, t):
     fps = 1.0 / (time.time() - t)
 
     # print(counts[0])
-    # if counts[0] == 1: # only extract the key points if exactly one person is detected
-    #     keypoints = get_keypoint(objects, 1, peaks)
-    #     head = keypoints[0]
-    #     neck = keypoints[17]
-    #     right_hip = keypoints[11]
-    #     left_hip = keypoints[12]
+    if counts[0] == 1: # only extract the key points if exactly one person is detected
+        keypoints = get_keypoint(objects, 0, peaks)
+        if keypoints[0][1]:
+            head = keypoints[0]
+            neck = keypoints[17]
+            right_hip = keypoints[11]
+            left_hip = keypoints[12]
         
-    #     print(head)
-        # head_y = head[0] * HEIGHT * Y_compress
-        # print(head_y)
+            print(head)
+            head_y = head[0] * HEIGHT
+            print(head_y)
 
 
     # reference code
-    for i in range(counts[0]):
-        print("Human index:%d "%( i ))
-        keypoints = get_keypoint(objects, i, peaks)
-        print(keypoints[0])
-        for j in range(len(keypoints)):
-            print(keypoints[j])
-            if keypoints[j][1]:
-                x = round(keypoints[j][2] * WIDTH )
-                y = round(keypoints[j][1] * HEIGHT)
-        #         x = round(keypoints[j][2] * WIDTH * X_compress)
-        #         y = round(keypoints[j][1] * HEIGHT * Y_compress)
-                cv2.circle(img, (x, y), 3, color, 2)
-                cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
-                cv2.circle(img, (x, y), 3, color, 2)
+    # for i in range(counts[0]):
+    #     print("Human index:%d "%( i ))
+    #     keypoints = get_keypoint(objects, i, peaks)
+    #     print(keypoints[0])
+    #     for j in range(len(keypoints)):
+    #         print(keypoints[j])
+    #         if keypoints[j][1]:
+    #             x = round(keypoints[j][2] * WIDTH )
+    #             y = round(keypoints[j][1] * HEIGHT)
+    #     #         x = round(keypoints[j][2] * WIDTH * X_compress) # incorrect adjustment, compress factor not needed
+    #     #         y = round(keypoints[j][1] * HEIGHT * Y_compress)
+    #             cv2.circle(img, (x, y), 3, color, 2)
+    #             cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
+    #             cv2.circle(img, (x, y), 3, color, 2)
 
     
     # draw_objects(img, counts, objects, peaks)
