@@ -135,6 +135,7 @@ def execute(img, t):
     for i in range(counts[0]):
         keypoints = get_keypoint(objects, i, peaks)
         for j in range(len(keypoints)):
+            print(keypoints[j])
             if keypoints[j][1]:
                 x = round(keypoints[j][2] * WIDTH * X_compress)
                 y = round(keypoints[j][1] * HEIGHT * Y_compress)
