@@ -135,15 +135,18 @@ def execute(img, t):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     fps = 1.0 / (time.time() - t)
+
+    print(counts[0])
     if counts[0] == 1: # only extract the key points if exactly one person is detected
         keypoints = get_keypoint(objects, i, peaks)
         head = keypoints[0]
         neck = keypoints[17]
         right_hip = keypoints[11]
         left_hip = keypoints[12]
-    print(head)
-    # head_y = head[1] * HEIGHT * Y_compress
-    # print(head_y)
+        
+        print(head)
+        # head_y = head[0] * HEIGHT * Y_compress
+        # print(head_y)
 
 
     # reference code
