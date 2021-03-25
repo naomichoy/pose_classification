@@ -16,10 +16,11 @@ import os.path
 '''
 img is PIL format
 '''
-def draw_keypoints(img, key):
+def draw_keypoints(img, key, hnum):
     thickness = 5
     w, h = img.size
     draw = PIL.ImageDraw.Draw(img)
+    cv2.putText(img , "human %f" % (hnum), (int(key[5][2] * w), int(key[5][1] * h)),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     #draw Rankle -> RKnee (16-> 14)
     if all(key[16]) and all(key[14]):
         draw.line([ int(key[16][2] * w), int(key[16][1] * h), int(key[14][2] * w), int(key[14][1] * h)],width = thickness, fill=(51,51,204))
@@ -144,7 +145,7 @@ def execute_2(img, org):
         print("Human index:%d "%( i ))
         kpoint = get_keypoint(objects, i, peaks)
         #print(kpoint)
-        org = draw_keypoints(org, kpoint)
+        org = draw_keypoints(org, kpoint, i)
     print("Human count:%d len:%d "%(counts[0], len(counts)))
     print('===== Net FPS :%f ====='%( 1 / (end - start)))
     return org
