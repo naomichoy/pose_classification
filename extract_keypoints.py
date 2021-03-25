@@ -57,11 +57,11 @@ def get_keypoint(humans, hnum, peaks):
             peak = peaks[0][j][k]   # peak[1]:width, peak[0]:height
             peak = (j, float(peak[0]), float(peak[1]))
             kpoint.append(peak)
-            #print('index:%d : success [%5.3f, %5.3f]'%(j, peak[1], peak[2]) )
+            print('index:%d : success [%5.3f, %5.3f]'%(j, peak[1], peak[2]) )
         else:    
             peak = (j, None, None)
             kpoint.append(peak)
-            #print('index:%d : None %d'%(j, k) )
+            print('index:%d : None %d'%(j, k) )
     return kpoint
 
 

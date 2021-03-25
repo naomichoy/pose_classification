@@ -19,8 +19,8 @@ img is PIL format
 def draw_keypoints(img, key, hnum):
     thickness = 5
     w, h = img.size
+    cv2.putText(img , "human %d" % (hnum), (int(key[5][2] * w), int(key[5][1] * h)),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     draw = PIL.ImageDraw.Draw(img)
-    cv2.putText(img , "human %f" % (hnum), (int(key[5][2] * w), int(key[5][1] * h)),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     #draw Rankle -> RKnee (16-> 14)
     if all(key[16]) and all(key[14]):
         draw.line([ int(key[16][2] * w), int(key[16][1] * h), int(key[14][2] * w), int(key[14][1] * h)],width = thickness, fill=(51,51,204))
