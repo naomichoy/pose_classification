@@ -226,10 +226,11 @@ while (True):  #cap.isOpened() and count < 500:
             fall_start = time.time()
             print("flag")
         if fallFlag == 1:
-            if head_y_list[4] < HEIGHT / 2 :
-                fallFlag = 0
-            else:
-                fall_time = time.time()
+            # if head_y_list[4] < HEIGHT / 2 :
+            #     fallFlag = 0
+            # else:
+            #     fall_time = time.time()
+            fall_time = time.time()
 
         if fall_time - fall_start > 5:
             fallFlag = 2
