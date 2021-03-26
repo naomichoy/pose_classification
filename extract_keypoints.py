@@ -225,11 +225,11 @@ while (True):  #cap.isOpened() and count < 500:
         if hDiff > FALL_THRESHOLD:
             fallFlag = 1
             fall_start = time.time()
-            print("flag")
+            # print("flag")
         if fallFlag == 1:
             if head_y_list[4] < HEIGHT / 2 :
                 print("stood up")
-                # fallFlag = 0
+                fallFlag = 0
             else:
                 fall_time = time.time()
 
@@ -247,6 +247,8 @@ while (True):  #cap.isOpened() and count < 500:
     if count > 1000:
         fallFlag = 0
         count = 0
+        fall_start = 0
+        fall_time = 0
 
     cv2.imshow('frame',output)
     if cv2.waitKey(1) & 0xFF == ord('q'):
