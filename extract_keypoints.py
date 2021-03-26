@@ -204,6 +204,7 @@ draw_objects = DrawObjects(topology)
 # main function
 head_y_list = []
 FALL_THRESHOLD = 60
+ALERT_THRESHOLD = 5
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
 fall_start = 0
 fall_time = 0
@@ -226,13 +227,13 @@ while (True):  #cap.isOpened() and count < 500:
             fall_start = time.time()
             print("flag")
         if fallFlag == 1:
-            # if head_y_list[4] < HEIGHT / 2 :
-            #     fallFlag = 0
-            # else:
-            #     fall_time = time.time()
-            fall_time = time.time()
+            if head_y_list[4] < HEIGHT / 2 :
+                print("stood up")
+                # fallFlag = 0
+            else:
+                fall_time = time.time()
 
-        if fall_time - fall_start > 5:
+        if fall_time - fall_start > ALERT_THRESHOLD:
             fallFlag = 2
         
         head_y_list.pop(0)
@@ -241,6 +242,7 @@ while (True):  #cap.isOpened() and count < 500:
     print("fallFlag:", fallFlag)
    
     count += 1
+    print(count)
     # for demo purpose
     if count > 1000:
         fallFlag = 0
