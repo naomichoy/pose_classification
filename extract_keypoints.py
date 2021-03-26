@@ -224,6 +224,7 @@ while (True):  #cap.isOpened() and count < 500:
         if hDiff > FALL_THRESHOLD:
             fallFlag = 1
             fall_start = time.time()
+            print("flag")
         if fallFlag == 1:
             if head_y_list[4] < HEIGHT / 2 :
                 fallFlag = 0
