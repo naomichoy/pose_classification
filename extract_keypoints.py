@@ -203,6 +203,8 @@ draw_objects = DrawObjects(topology)
 head_y_list = []
 FALL_THRESHOLD = 60
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
+fall_start = 0
+fall_time = 0
 
 while (True):  #cap.isOpened() and count < 500:
     # read camera frame
