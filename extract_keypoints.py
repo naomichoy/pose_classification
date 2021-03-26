@@ -150,6 +150,7 @@ def execute(img, t):
             print(head)
             head_y = head[1] * HEIGHT # index 1 = height
             print(head_y)
+            head_y_list.append(head_y)
 
 
     # reference code
@@ -199,21 +200,45 @@ if cap is None:
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
-min_head_y = 0
-max_head_y = 0
+head_y_list = []
 FALL_THRESHOLD = 60
+fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
 
 while (True):  #cap.isOpened() and count < 500:
+    # read camera frame
     t = time.time()
-    # ret_val, dst = cap.read()
     ret, frame = cap.read()
     if ret == False:
         print("Camera read Error")
         break
-
     imgg = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+    # feed frame into OpenPose
     output = execute(imgg, t)
+
+    if len(head_y_list) > 5: 
+        hDiff = abs(head_y_list[4]-head_y_list[0])
+        if hDiff > FALL_THRESHOLD:
+            fallFlag = 1
+            fall_start = time.time()
+        if fallFlag == 1:
+            if hDiff > FALL_THRESHOLD:
+                fallFlag = 0
+            else:
+                fall_time = time.time()
+
+        if fall_time - fall_start > 5:
+            fallFlag = 2
+        
+        head_y_list.pop(0)
+    
+    print(head_y_list)
+   
     count += 1
+    # for demo purpose
+    if count > 1000:
+        fallFlag = 0
+        count = 0
+
     cv2.imshow('frame',output)
     if cv2.waitKey(1) & 0xFF == ord('q'):
       break
