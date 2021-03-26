@@ -180,7 +180,7 @@ def execute(img, t):
     # out_video.write(src)
 
 
-
+# initialise camera stream
 cap = cv2.VideoCapture(1) # usb camera
 # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) # CSI camera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -201,6 +201,7 @@ if cap is None:
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
+# main function
 head_y_list = []
 FALL_THRESHOLD = 60
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
@@ -219,12 +220,12 @@ while (True):  #cap.isOpened() and count < 500:
     output = execute(imgg, t)
 
     if len(head_y_list) > 5: 
-        hDiff = abs(head_y_list[4]-head_y_list[0])
+        hDiff = head_y_list[4]-head_y_list[0]
         if hDiff > FALL_THRESHOLD:
             fallFlag = 1
             fall_start = time.time()
         if fallFlag == 1:
-            if hDiff > FALL_THRESHOLD:
+            if head_y_list[4] < HEIGHT / 2 :
                 fallFlag = 0
             else:
                 fall_time = time.time()
