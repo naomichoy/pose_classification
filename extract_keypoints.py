@@ -235,6 +235,7 @@ while (True):  #cap.isOpened() and count < 500:
         head_y_list.pop(0)
     
     print(head_y_list)
+    print("fallFlag:", fallFlag)
    
     count += 1
     # for demo purpose
