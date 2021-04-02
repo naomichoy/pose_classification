@@ -146,6 +146,9 @@ def execute(img, t):
             Rhip = keypoints[12]
             # Lshoulder = keypoints[5]  # neck point is mid of shoulders
             # Rshoulder = keypoints[6]
+
+            head_y = 0
+            neck_y = 0
         
             # print(head)
             if head[1]: 
@@ -248,7 +251,8 @@ while (True):  #cap.isOpened() and count < 500:
         # head_y_list.pop(0)
         coordinates.pop(0)
     
-    print(head_y_list)
+    # print(head_y_list)
+    print(coordinates)
     print("fallFlag:", fallFlag)
    
     count += 1
