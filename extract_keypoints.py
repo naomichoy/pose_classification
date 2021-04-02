@@ -144,14 +144,19 @@ def execute(img, t):
             neck = keypoints[17]
             Lhip = keypoints[11]
             Rhip = keypoints[12]
-            Lshoulder = keypoints[5]
-            Rshoulder = keypoints[6]
+            # Lshoulder = keypoints[5]  # neck point is mid of shoulders
+            # Rshoulder = keypoints[6]
         
             # print(head)
             if head[1]: 
                 head_y = head[1] * HEIGHT # index 1 = height
                 # print(head_y)
                 head_y_list.append(head_y)
+
+            if neck[1]: 
+                neck_y = neck[1] * HEIGHT  
+
+            coordinates.append([head_y, neck_y])    
 
 
     # reference code
@@ -203,8 +208,10 @@ draw_objects = DrawObjects(topology)
 
 # main function
 head_y_list = []
+coordinates = []
 FALL_THRESHOLD = 60
 ALERT_THRESHOLD = 5
+STAND_THRESHOLD = 30
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
 fall_start = 0
 fall_time = 0
@@ -220,14 +227,16 @@ while (True):  #cap.isOpened() and count < 500:
     # feed frame into OpenPose
     output = execute(imgg, t)
 
-    if len(head_y_list) > 5: 
-        hDiff = head_y_list[4]-head_y_list[0]
-        if hDiff > FALL_THRESHOLD:
+    if len(coordinates) > 5: 
+        # hDiff = head_y_list[4]-head_y_list[0]
+        hDiff = coordinates[4][0]-coordinates[0][0]
+        nDiff = coordinates[4][1]-coordinates[0][1]
+        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD:
             fallFlag = 1
             fall_start = time.time()
             # print("flag")
         if fallFlag == 1:
-            if head_y_list[4] < HEIGHT / 2 :
+            if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
                 print("stood up")
                 fallFlag = 0
             else:
@@ -236,7 +245,8 @@ while (True):  #cap.isOpened() and count < 500:
         if fall_time - fall_start > ALERT_THRESHOLD:
             fallFlag = 2
         
-        head_y_list.pop(0)
+        # head_y_list.pop(0)
+        coordinates.pop(0)
     
     print(head_y_list)
     print("fallFlag:", fallFlag)
