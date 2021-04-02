@@ -168,7 +168,7 @@ def execute(img, t):
     #     keypoints = get_keypoint(objects, i, peaks)
     #     print(keypoints[0])
         for j in range(len(keypoints)):
-            print(keypoints[j])
+            # print(keypoints[j])
             if keypoints[j][1]:
                 x = round(keypoints[j][2] * WIDTH )
                 y = round(keypoints[j][1] * HEIGHT)
@@ -189,7 +189,7 @@ def execute(img, t):
 
 
 # initialise camera stream
-cap = cv2.VideoCapture(1) # usb camera
+cap = cv2.VideoCapture(0) # usb camera
 # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) # CSI camera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
