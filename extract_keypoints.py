@@ -154,7 +154,7 @@ def execute(img, t):
             if head[1]: 
                 head_y = head[1] * HEIGHT # index 1 = height
                 # print(head_y)
-                head_y_list.append(head_y)
+                # head_y_list.append(head_y)
 
             if neck[1]: 
                 neck_y = neck[1] * HEIGHT  
@@ -210,11 +210,11 @@ parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
 # main function
-head_y_list = []
+# head_y_list = []
 coordinates = []
 FALL_THRESHOLD = 60
 ALERT_THRESHOLD = 5
-STAND_THRESHOLD = 30
+STAND_THRESHOLD = 10
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
 fall_start = 0
 fall_time = 0
@@ -234,12 +234,13 @@ while (True):  #cap.isOpened() and count < 500:
         # hDiff = head_y_list[4]-head_y_list[0]
         hDiff = coordinates[4][0]-coordinates[0][0]
         nDiff = coordinates[4][1]-coordinates[0][1]
-        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD:
+        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20:
             fallFlag = 1
             fall_start = time.time()
             # print("flag")
         if fallFlag == 1:
-            if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
+            # if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
+            if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
                 print("stood up")
                 fallFlag = 0
             else:
