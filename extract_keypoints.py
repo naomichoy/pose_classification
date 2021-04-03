@@ -50,6 +50,7 @@ def get_keypoint(humans, hnum, peaks):
     #check invalid human index
     kpoint = []
     human = humans[0][hnum]
+    print(human)
     C = human.shape[0]
     for j in range(C):
         k = int(human[j])
@@ -234,7 +235,7 @@ while (True):  #cap.isOpened() and count < 500:
         # hDiff = head_y_list[4]-head_y_list[0]
         hDiff = coordinates[4][0]-coordinates[0][0]
         nDiff = coordinates[4][1]-coordinates[0][1]
-        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20:
+        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20: # neck fall triggered sitting
             fallFlag = 1
             fall_start = time.time()
             # print("flag")
