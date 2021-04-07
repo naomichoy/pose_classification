@@ -181,7 +181,7 @@ def execute(img, t):
 
 
 # initialise camera stream
-cap = cv2.VideoCapture(1) # usb camera
+cap = cv2.VideoCapture(0) # usb camera
 # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0),cv2.CAP_GSTREAMER) # CSI camera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
