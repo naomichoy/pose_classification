@@ -66,6 +66,23 @@ def get_keypoint(humans, hnum, peaks):
     return kpoint
 
 
+def fall_body_ratio(keypoints):
+    keypoints_y = []
+    keypoints_x = []
+    for i in range(len(keypoints)):
+        keypoints_y.append(keypoints[i][1])
+        keypoints_x.append(keypoints[i][0])
+    y_max = max(keypoints_y)
+    y_min = min(keypoints_y)
+    x_max = max(keypoints_x)
+    x_min = min(keypoints_x)
+    body_ratio = (y_max-y_min)/(x_max-x_min)
+    if body_ratio < 1:
+        return True
+    else:
+        return False
+
+
 parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
 parser.add_argument('--model', type=str, default='resnet', help = 'resnet or densenet' )
 args = parser.parse_args()
@@ -130,6 +147,7 @@ def preprocess(image):
     return image[None, ...]
 
 def execute(img, t):
+    global isFallRatio
     color = (0, 255, 0) # <-- for drawing circle points
     data = preprocess(img)
     cmap, paf = model_trt(data)
@@ -141,16 +159,19 @@ def execute(img, t):
     if counts[0] == 1: # only extract the key points if exactly one person is detected
 
         keypoints = get_keypoint(objects, i, peaks)
-        keypoints_y = []
-        keypoints_x = []
-        for i in range(len(keypoints)):
-            keypoints_y.append(keypoints[i][1])
-            keypoints_x.append(keypoints[i][0])
-        y_max = max(keypoints_y)
-        y_min = min(keypoints_y)
-        x_max = max(keypoints_x)
-        x_min = min(keypoints_x)
-        body_ratio = (y_max-y_min)/(x_max-x_min)
+        # isFallRatio = fall_body_ratio(keypoints)
+
+        if keypoints[0][1] or keypoints[17][1]:
+            head = keypoints[0]
+            neck = keypoints[17]
+            Lhip = keypoints[11]
+            Rhip = keypoints[12]
+            Lshoulder = keypoints[5]
+            Rshoulder = keypoints[6]
+
+            if head[1]: 
+                head_y = head[1] * HEIGHT # index 1 = height
+                head_y_list.append(head_y)
 
 
     # reference code
@@ -169,19 +190,27 @@ def execute(img, t):
                 cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
                 # cv2.circle(img, (x, y), 3, color, 2)
 
+                keypoints_y.append(keypoints[j][1])
+                keypoints_x.append(keypoints[j][0])
+
+        y_max = max(keypoints_y)
+        y_min = min(keypoints_y)
+        x_max = max(keypoints_x)
+        x_min = min(keypoints_x)
+        body_ratio = (y_max-y_min)/(x_max-x_min)
+        if body_ratio < 1:
+            isFallRatio = True
+        else:
+            isFallRatio = False
     
     # draw_objects(img, counts, objects, peaks)
 
     # cv2.putText(img , "FPS: %f" % (fps), (20, 20),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
     # cv2.imshow('frame', src)
     print("FPS:%f "%(fps))
-    return img, body_ratio
+    return img
     # out_video.write(src)
 
-def possible_fall_ratio(ratio):
-    if body_ratio < 1:
-        return True
-    return False
 
 # initialise camera stream
 cap = cv2.VideoCapture(0) # usb camera
@@ -206,8 +235,8 @@ draw_objects = DrawObjects(topology)
 
 # main function
 
-# head_y_list = []
-coordinates = []
+head_y_list = []
+# coordinates = []
 
 FALL_THRESHOLD = 60
 ALERT_THRESHOLD = 5
@@ -228,22 +257,22 @@ while (True):  #cap.isOpened() and count < 500:
         break
     imgg = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
     # feed frame into OpenPose
-    output, body_ratio = execute(imgg, t)
-
-    isFallRatio = possible_fall_ratio(ratio)
+    output = execute(imgg, t)
 
 
     if len(coordinates) > 5: 
-        # hDiff = head_y_list[4]-head_y_list[0]
-        hDiff = coordinates[4][0]-coordinates[0][0]
-        nDiff = coordinates[4][1]-coordinates[0][1]
-        if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20: # neck fall triggered sitting
+        hDiff = head_y_list[4]-head_y_list[0]
+        # hDiff = coordinates[4][0]-coordinates[0][0]
+        # nDiff = coordinates[4][1]-coordinates[0][1]
+        # if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20: # neck fall triggered sitting
+        if hDiff > FALL_THRESHOLD and isFallRatio:
             fallFlag = 1
             fall_start = time.time()
             # print("flag")
         if fallFlag == 1:
             # if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
-            if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
+            # if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
+            if not isFallRatio:
                 print("stood up")
                 fallFlag = 0
             else:
@@ -252,11 +281,11 @@ while (True):  #cap.isOpened() and count < 500:
         if fall_time - fall_start > ALERT_THRESHOLD:
             fallFlag = 2
         
-        # head_y_list.pop(0)
-        coordinates.pop(0)
+        head_y_list.pop(0)
+        # coordinates.pop(0)
     
-    # print(head_y_list)
-    print(coordinates)
+    print(head_y_list)
+    # print(coordinates)
     print("fallFlag:", fallFlag)
    
     count += 1
