@@ -50,7 +50,7 @@ def get_keypoint(humans, hnum, peaks):
     #check invalid human index
     kpoint = []
     human = humans[0][hnum]
-    print(human)
+    # print(human)
     C = human.shape[0]
     for j in range(C):
         k = int(human[j])
@@ -196,19 +196,20 @@ def execute(img, t):
                 keypoints_y.append(keypoints[j][1])
                 keypoints_x.append(keypoints[j][0])
 
-        y_max = max(keypoints_y)
-        y_min = min(keypoints_y)
-        x_max = max(keypoints_x)
-        x_min = min(keypoints_x)
-        cv2.line(image, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
-        cv2.line(image, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
-        cv2.line(image, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
-        cv2.line(image, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
-        body_ratio = (y_max-y_min)/(x_max-x_min)
-        if body_ratio < 1:
-            isFallRatio = True
-        else:
-            isFallRatio = False
+        if len(keypoints_y) > 0:
+            y_max = max(keypoints_y)
+            y_min = min(keypoints_y)
+            x_max = max(keypoints_x)
+            x_min = min(keypoints_x)
+            cv2.line(image, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
+            cv2.line(image, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
+            cv2.line(image, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
+            cv2.line(image, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
+            body_ratio = (y_max-y_min)/(x_max-x_min)
+            if body_ratio < 1:
+                isFallRatio = True
+            else:
+                isFallRatio = False
     
     # draw_objects(img, counts, objects, peaks)
 
