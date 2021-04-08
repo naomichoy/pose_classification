@@ -197,10 +197,10 @@ def execute(img, t):
                 keypoints_x.append(keypoints[j][0])
 
         if len(keypoints_y) > 0:
-            y_max = max(keypoints_y)
-            y_min = min(keypoints_y)
-            x_max = max(keypoints_x)
-            x_min = min(keypoints_x)
+            y_max = int(max(keypoints_y) * HEIGHT)
+            y_min = int(min(keypoints_y) * HEIGHT)
+            x_max = int(max(keypoints_x) * WIDTH)
+            x_min = int(min(keypoints_x) * WIDTH)
             cv2.line(img, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
