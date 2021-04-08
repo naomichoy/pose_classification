@@ -166,9 +166,8 @@ def execute(img, t):
                 y = round(keypoints[j][1] * HEIGHT)
         #         x = round(keypoints[j][2] * WIDTH * X_compress) # incorrect adjustment, compress factor not needed
         #         y = round(keypoints[j][1] * HEIGHT * Y_compress)
-                cv2.circle(img, (x, y), 3, color, 2)
+                cv2.circle(img, (x, y), 3, color, 1)
                 cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
-                # cv2.circle(img, (x, y), 3, color, 2)
 
     
     # draw_objects(img, counts, objects, peaks)
