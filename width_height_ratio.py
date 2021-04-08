@@ -155,6 +155,9 @@ def execute(img, t):
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     fps = 1.0 / (time.time() - t)
 
+    keypoints_y = []
+    keypoints_x = []
+
     # print(counts[0])
     if counts[0] == 1: # only extract the key points if exactly one person is detected
 
@@ -197,6 +200,10 @@ def execute(img, t):
         y_min = min(keypoints_y)
         x_max = max(keypoints_x)
         x_min = min(keypoints_x)
+        cv2.line(image, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
+        cv2.line(image, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
+        cv2.line(image, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
+        cv2.line(image, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
         body_ratio = (y_max-y_min)/(x_max-x_min)
         if body_ratio < 1:
             isFallRatio = True
