@@ -161,7 +161,7 @@ def execute(img, t):
     # print(counts[0])
     if counts[0] == 1: # only extract the key points if exactly one person is detected
 
-        keypoints = get_keypoint(objects, i, peaks)
+        keypoints = get_keypoint(objects, 0, peaks)
         # isFallRatio = fall_body_ratio(keypoints)
 
         if keypoints[0][1] or keypoints[17][1]:
