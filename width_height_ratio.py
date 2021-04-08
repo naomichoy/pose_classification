@@ -189,7 +189,7 @@ def execute(img, t):
                 y = round(keypoints[j][1] * HEIGHT)
         #         x = round(keypoints[j][2] * WIDTH * X_compress) # incorrect adjustment, compress factor not needed
         #         y = round(keypoints[j][1] * HEIGHT * Y_compress)
-                cv2.circle(img, (x, y), 3, color, 2)
+                cv2.circle(img, (x, y), 3, color, 1)
                 cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
                 # cv2.circle(img, (x, y), 3, color, 2)
 
@@ -201,10 +201,10 @@ def execute(img, t):
             y_min = min(keypoints_y)
             x_max = max(keypoints_x)
             x_min = min(keypoints_x)
-            # cv2.line(image, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
-            # cv2.line(image, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
-            # cv2.line(image, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
-            # cv2.line(image, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
+            cv2.line(image, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
+            cv2.line(image, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
+            cv2.line(image, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
+            cv2.line(image, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
             body_ratio = (y_max-y_min)/(x_max-x_min)
             if body_ratio < 1:
                 isFallRatio = True
@@ -267,7 +267,7 @@ while (True):  #cap.isOpened() and count < 500:
     # feed frame into OpenPose
     output = execute(imgg, t)
 
-    print(isFallRatio)
+    print("ratio:", isFallRatio)
     if len(head_y_list) > 5: 
         hDiff = head_y_list[4]-head_y_list[0]
         # hDiff = coordinates[4][0]-coordinates[0][0]
