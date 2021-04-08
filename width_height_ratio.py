@@ -260,7 +260,7 @@ while (True):  #cap.isOpened() and count < 500:
     output = execute(imgg, t)
 
 
-    if len(coordinates) > 5: 
+    if len(head_y_list) > 5: 
         hDiff = head_y_list[4]-head_y_list[0]
         # hDiff = coordinates[4][0]-coordinates[0][0]
         # nDiff = coordinates[4][1]-coordinates[0][1]
