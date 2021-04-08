@@ -147,10 +147,10 @@ def execute(img, t):
             Lshoulder = keypoints[5]
             Rshoulder = keypoints[6]
         
-            print(head)
+            # print(head)
             if head[1]: 
                 head_y = head[1] * HEIGHT # index 1 = height
-                print(head_y)
+                # print(head_y)
                 head_y_list.append(head_y)
 
 
