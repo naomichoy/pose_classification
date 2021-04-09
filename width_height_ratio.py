@@ -201,11 +201,13 @@ def execute(img, t):
             x_max = int(max(keypoints_x) * WIDTH)
             x_min = int(min(keypoints_x) * WIDTH)
             print("max and min:", y_max, y_min, x_max, x_min)
-            cv2.line(img, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
+            cv2.line(img, (x_min, y_max), (x_min,y_min), (255, 0, 0), 1) # (start x,y) , (end x,y)
             cv2.line(img, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
-            cv2.line(img, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
+            cv2.line(img, (x_max, y_max), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
-            body_ratio = (y_max-y_min)/(x_max-x_min)
+            if (x_max-x_min) != 0:
+                body_ratio = (y_max-y_min)/(x_max-x_min)
+            print("ratio:", body_ratio)
             if body_ratio < 1:
                 isFallRatio = True
             else:
