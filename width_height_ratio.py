@@ -284,7 +284,7 @@ while (True):  #cap.isOpened() and count < 500:
             # if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
             # if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
             # if not isFallRatio:
-            if not isFallRatio and hdiff > STAND_THRESHOLD:
+            if not isFallRatio and hDiff > STAND_THRESHOLD:
                 print("stood up")
                 fallFlag = 0
             else:
