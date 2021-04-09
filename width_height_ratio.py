@@ -200,6 +200,7 @@ def execute(img, t):
             y_min = int(min(keypoints_y) * HEIGHT)
             x_max = int(max(keypoints_x) * WIDTH)
             x_min = int(min(keypoints_x) * WIDTH)
+            print("max and min:", y_max, y_min, x_max, x_min)
             cv2.line(img, (x_max, x_max), (y_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, x_min), (y_min,y_max), (255, 0, 0), 1)
