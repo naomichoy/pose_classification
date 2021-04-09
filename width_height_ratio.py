@@ -200,18 +200,19 @@ def execute(img, t):
             y_min = int(min(keypoints_y) * HEIGHT)
             x_max = int(max(keypoints_x) * WIDTH)
             x_min = int(min(keypoints_x) * WIDTH)
-            print("max and min:", y_max, y_min, x_max, x_min)
+            # print("max and min:", y_max, y_min, x_max, x_min)
             cv2.line(img, (x_min, y_max), (x_min,y_min), (255, 0, 0), 1) # (start x,y) , (end x,y)
             cv2.line(img, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_max, y_max), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_min, y_max), (x_max,y_max), (255, 0, 0), 1)
+
             if (x_max-x_min) != 0:
                 body_ratio = (y_max-y_min)/(x_max-x_min)
-            print("ratio:", body_ratio)
-            if body_ratio < 1:
-                isFallRatio = True
-            else:
-                isFallRatio = False
+                print("ratio:", body_ratio)
+                if body_ratio < 1:
+                    isFallRatio = True
+                else:
+                    isFallRatio = False
     
     # draw_objects(img, counts, objects, peaks)
 
@@ -282,7 +283,8 @@ while (True):  #cap.isOpened() and count < 500:
         if fallFlag == 1:
             # if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
             # if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
-            if not isFallRatio:
+            # if not isFallRatio:
+            if not isFallRatio and hdiff > STAND_THRESHOLD:
                 print("stood up")
                 fallFlag = 0
             else:
@@ -294,14 +296,14 @@ while (True):  #cap.isOpened() and count < 500:
         head_y_list.pop(0)
         # coordinates.pop(0)
     
-    print(head_y_list)
+    print("last frames", head_y_list)
     # print(coordinates)
     print("fallFlag:", fallFlag)
    
     count += 1
     print(count)
     # for demo purpose
-    if count > 1000:
+    if count > 500:
         fallFlag = 0
         count = 0
         fall_start = 0
