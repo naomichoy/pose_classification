@@ -251,7 +251,7 @@ head_y_list = []
 
 FALL_THRESHOLD = 60
 ALERT_THRESHOLD = 5
-STAND_THRESHOLD = 10
+STAND_THRESHOLD = 25
 
 fallFlag = 0    # 0 no fall, 1 warning, 2 alarm
 fall_start = 0
