@@ -193,7 +193,7 @@ def execute(img, t):
                 cv2.putText(img , "%d" % int(keypoints[j][0]), (x + 5, y),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 1)
 
                 keypoints_y.append(keypoints[j][1])
-                keypoints_x.append(keypoints[j][0])
+                keypoints_x.append(keypoints[j][2])
 
         if len(keypoints_y) > 0:
             y_max = int(max(keypoints_y) * HEIGHT)
