@@ -201,6 +201,8 @@ def execute(img, t):
             x_max = int(max(keypoints_x) * WIDTH)
             x_min = int(min(keypoints_x) * WIDTH)
             # print("max and min:", y_max, y_min, x_max, x_min)
+
+            # draw bounding box
             cv2.line(img, (x_min, y_max), (x_min,y_min), (255, 0, 0), 1) # (start x,y) , (end x,y)
             cv2.line(img, (x_min, y_min), (x_max,y_min), (255, 0, 0), 1)
             cv2.line(img, (x_max, y_max), (x_max,y_min), (255, 0, 0), 1)
@@ -273,16 +275,12 @@ while (True):  #cap.isOpened() and count < 500:
     print("ratio:", isFallRatio)
     if len(head_y_list) > 5: 
         hDiff = head_y_list[4]-head_y_list[0]
-        # hDiff = coordinates[4][0]-coordinates[0][0]
-        # nDiff = coordinates[4][1]-coordinates[0][1]
-        # if hDiff > FALL_THRESHOLD or nDiff > FALL_THRESHOLD + 20: # neck fall triggered sitting
         if hDiff > FALL_THRESHOLD and isFallRatio:
             fallFlag = 1
             fall_start = time.time()
             # print("flag")
         if fallFlag == 1:
             # if head_y_list[4] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
-            # if coordinates[4][0] < HEIGHT / 2 and hDiff > STAND_THRESHOLD:
             # if not isFallRatio:
             if not isFallRatio and hDiff > STAND_THRESHOLD:
                 print("stood up")
@@ -294,10 +292,8 @@ while (True):  #cap.isOpened() and count < 500:
             fallFlag = 2
         
         head_y_list.pop(0)
-        # coordinates.pop(0)
     
     print("last frames", head_y_list)
-    # print(coordinates)
     print("fallFlag:", fallFlag)
    
     count += 1
